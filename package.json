@@ -1,0 +1,40 @@
+{
+  "name": "@dmantsevich/aem-critical-css",
+  "version": "1.0.0",
+  "description": "Tool which helps to build/inject critical(component) CSS for AEM components (Adobe Experience Manager)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dmantsevich/aem-critical-css.git"
+  },
+  "keywords": [
+    "aem",
+    "AEM",
+    "critical",
+    "critical css",
+    "css",
+    "building tool",
+    "nodejs",
+    "Adobe Experience Manager",
+    "node"
+  ],
+  "author": "https://github.com/dmantsevich",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dmantsevich/aem-critical-css/issues"
+  },
+  "homepage": "https://github.com/dmantsevich/aem-critical-css#readme",
+  "dependencies": {
+    "@dmantsevich/colorful-semantic-logger": "^1.0.1",
+    "autoprefixer": "^10.2.4",
+    "cssnano": "^4.1.10",
+    "filesize": "^6.1.0",
+    "globby": "^11.0.2",
+    "lodash.merge": "^4.6.2",
+    "postcss": "^8.2.4"
+  },
+  "devDependencies": {}
+}
