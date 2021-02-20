@@ -34,6 +34,7 @@
     "filesize": "^6.1.0",
     "globby": "^11.0.2",
     "gzip-size": "^6.0.0",
+    "html-minifier": "^4.0.0",
     "less": "^4.1.1",
     "lodash.merge": "^4.6.2",
     "node-sass": "^5.0.0",
