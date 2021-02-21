@@ -45,8 +45,29 @@ npm i @dmantsevich/aem-critical-css --save
 ```
 
 ## How to use 🐟
-Should helps to understand how it use 
-TBD
+That section shows basic usage for beginners.
+1. Open AEM component template and add next code (where _"path/to/component-css.less"_ is path to critical css file, which should be injected. Path is related to ``${config.css.sourceRoot}`` (see [config](#config-)). Supports: **less**, **scss**, **sass**, **css** types):
+```html
+<sly data-sly-use.aemCriticalCSS="${'./_aem-critical-css.js'}"
+	@aem-critical-css="path/to/component-css.less">${aemCriticalCSS.inject @ context="unsafe"}</sly>
+```
+2. Go to folder where frontend team are working (``cd ui.frontend`` or ``cd ui.clientlibs`` or other)
+3. Install [AEM Critical CSS](https://www.npmjs.com/package/@dmantsevich/aem-critical-css) module/package as dependency (see [Install](#install-) section):
+```shell script
+npm i @dmantsevich/aem-critical-css --save
+``` 
+4. Create ``aem-critical-css.js`` file (in the future webpack, gulp & grunt wrappers will be added) with code:
+```js
+const { process } = require('@dmantsevich/aem-critical-css');
+const config = {}; // it is configuration for the project
+process(config);
+```
+5. Process templates (see [Regular Workflow](#regular-workflow-) section) (it should be a part of frontend build):
+```shell script
+node aem-critical-css.js
+```
+6. If processing was successful, then you can find generated css file (_aem-critical-css.js_) near AEM component template.  
+ 
 
 ## API 🦔
 Should helps to integrate with your build process
@@ -57,20 +78,24 @@ Should helps to configure your build process
 TBD
 
 ## Partial CSS injection 🐇
-Should helps to split & inject only necessary CSS for your component (depends on component configuration)  
+Should helps to split & inject only necessary CSS for your component (depends on component configuration)
+  
 TBD 
 
 ## Custom Services
 Will describe how to create own service
+
 TBD
 
 ## Best practice 🦗
 - Add **_aem-critical-css.js**, **_aem-critical-css.html** files (see [config](#config-)) to your [.gitignore](https://github.com/github/gitignore) file
 - Add **ui.apps/src/main/content/jcr_root/apps/aem-critical-css/** folder (see [config](#config-)) to your [.gitignore](https://github.com/github/gitignore) file
+
 TBD
 
 ## FAQ 🦆
 Most popular questions/answers will be here
+
 TBD
 
 
