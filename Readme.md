@@ -17,25 +17,6 @@
 - [x] Tested on several AEM projects
 - [x] etc.
 
-## Regular Workflow 🐉
-1. Tool is searching all ``"*.html"`` files ([HTL](https://experienceleague.adobe.com/docs/experience-manager-htl/using/htl/block-statements.html?lang=en#overview)) under ``${config.AEM.components}`` (by default: **ui.apps/src/main/content/jcr_root/apps/** folder | see [config](#config-)) folder
-2. Analyzing all found files, which contains ``${criticalCSS.file}.${criticalCSS.type}`` (by default: **_aem-critical-css.js** string | see [config](#config-)) string. 
-3. Parsing ``${config.criticalCSS.sourceAttr}``, ``${config.criticalCSS.injectionTypeAttr}``, ``${config.criticalCSS.serviceAttr}`` attributes. (by default: **@aem-critical-css**, **@aem-critical-css-injectiontype**, **@aem-critical-css-service** attributes | see [config](#config-))
-4. If parsing was successful, then starts _generating CSS code_ linked in ``${config.criticalCSS.sourceAttr}`` (by default: **@aem-critical-css** attribute | see [config](#config-)) attribute.
-    - Reading source ``${config.css.sourceRoot}/${@aem-critical-css-attribute-value}`` file (by default: **./${aem-critical-css-attribute-value}** | see [config](#config-))
-    - Compile source file with **[less](https://www.npmjs.com/package/less)**, **[node-sass](https://www.npmjs.com/package/node-sass)** compiler
-    - Process CSS with [postcss](https://www.npmjs.com/package/postcss) plugins (by default: **autoprefixer**, **cssnano** | see [config](#config-))
-5. Resolve injection type
-    - If **${config.criticalCSS.injectionTypeAttr}** attribute (by default: **@aem-critical-css-injectiontype** | see [config](#config-)) is defined, then it will be used
-    - Otherwise **${config.criticalCSS.injectionType}** value (by default: **auto** | see [config](#config-)) will be used
-    - Resolving for injection type **auto**:
-        - Calculating _filesize_ for generated CSS file (after gzip)
-        - If _filesize_ is lower ``${config.criticalCSS.gzipSize}`` (by default: **10kb** | see [config](#config-)) then file will be injected via ``<style>`` tag.
-        - Otherwise file will be injected via ``<link>`` tag.
-6. If injection type is **link**, then css file(file name will contains hash) will be saved under **${config.web.localClientlib}/resources/** folder (by default: **ui.apps/src/main/content/jcr_root/apps/aem-critical-css/resources/** | see [config](#config-))
-7. Generating ``${criticalCSS.file}.${criticalCSS.type}`` (by default: **_aem-critical-css.js** | see [config](#config-)) file in the same folder with [HTL template](https://experienceleague.adobe.com/docs/experience-manager-htl/using/htl/block-statements.html?lang=en#overview) (where it used).
-    
-
 
 ## Install 🐠
 1) Install **[NodeJs](https://nodejs.org/en/)** (This will also install **[npm](https://www.npmjs.com/)**)
@@ -43,6 +24,7 @@
 ```shell script
 npm i @dmantsevich/aem-critical-css --save
 ```
+
 
 ## How to use 🐟
 That section shows basic usage for beginners.
@@ -66,16 +48,63 @@ process(config);
 ```shell script
 node aem-critical-css.js
 ```
-6. If processing was successful, then you can find generated css file (_aem-critical-css.js_) near AEM component template.  
- 
+6. If processing was successful, then you can find generated css file (_aem-critical-css.js_) near AEM component template.
+7. You can deploy code to AEM
+
+
+## Regular Workflow 🐉
+1. Tool is searching all ``"*.html"`` files ([HTL](https://experienceleague.adobe.com/docs/experience-manager-htl/using/htl/block-statements.html?lang=en#overview)) under ``${config.AEM.components}`` (by default: **ui.apps/src/main/content/jcr_root/apps/** folder | see [config](#config-)) folder
+2. Analyzing all found files, which contains ``${criticalCSS.file}.${criticalCSS.type}`` (by default: **_aem-critical-css.js** string | see [config](#config-)) string. 
+3. Parsing ``${config.criticalCSS.sourceAttr}``, ``${config.criticalCSS.injectionTypeAttr}``, ``${config.criticalCSS.serviceAttr}`` attributes. (by default: **@aem-critical-css**, **@aem-critical-css-injectiontype**, **@aem-critical-css-service** attributes | see [config](#config-))
+4. If parsing was successful, then starts _generating CSS code_ linked in ``${config.criticalCSS.sourceAttr}`` (by default: **@aem-critical-css** attribute | see [config](#config-)) attribute.
+    - Reading source ``${config.css.sourceRoot}/${@aem-critical-css-attribute-value}`` file (by default: **./${aem-critical-css-attribute-value}** | see [config](#config-))
+    - Compile source file with **[less](https://www.npmjs.com/package/less)**, **[node-sass](https://www.npmjs.com/package/node-sass)** compiler (you can create your custom compiler)
+    - Process CSS with [postcss](https://www.npmjs.com/package/postcss) plugins (by default: **autoprefixer**, **cssnano** | see [config](#config-))
+5. Resolve injection type
+    - If **${config.criticalCSS.injectionTypeAttr}** attribute (by default: **@aem-critical-css-injectiontype** | see [config](#config-)) is defined, then it will be used
+    - Otherwise **${config.criticalCSS.injectionType}** value (by default: **auto** | see [config](#config-)) will be used
+    - Resolving for injection type **auto**:
+        - Calculating _filesize_ for generated CSS file (after gzip)
+        - If _filesize_ is lower ``${config.criticalCSS.gzipSize}`` (by default: **10kb** | see [config](#config-)) then file will be injected via ``<style>`` tag.
+        - Otherwise file will be injected via ``<link>`` tag.
+6. If injection type is **link**, then css file(file name will contains hash) will be saved under **${config.web.localClientlib}/resources/** folder (by default: **ui.apps/src/main/content/jcr_root/apps/aem-critical-css/resources/** | see [config](#config-))
+7. Generating ``${criticalCSS.file}.${criticalCSS.type}`` (by default: **_aem-critical-css.js** | see [config](#config-)) file in the same folder with [HTL template](https://experienceleague.adobe.com/docs/experience-manager-htl/using/htl/block-statements.html?lang=en#overview) (where it used). 
+
 
 ## API 🦔
-Should helps to integrate with your build process
-TBD
+Next properties & method exports [@dmantsevich/aem-critical-css](https://www.npmjs.com/package/@dmantsevich/aem-critical-css) module:
+- **process(config)** _{function}_ - process AEM templates & generate css files for injection.
+- **CRITICAL_CSS_TYPES** _{constants}_ - contains possible types for critical css files. Uses in configuration ``${config.criticalCSS.type}``. See [config](#config-) section
+    - **CRITICAL_CSS_TYPES.TEMPLATE** - generate [HTL](https://experienceleague.adobe.com/docs/experience-manager-htl/using/getting-started/getting-started.html?lang=en#getting-started) files.
+    - **CRITICAL_CSS_TYPES.USEAPI** - generate [JS](https://experienceleague.adobe.com/docs/experience-manager-htl/using/htl/use-api-javascript.html?lang=en#a-simple-example) files.
+- **INJECTION_TYPES** _{constants}_ - contains possible values for configuration ``${config.criticalCSS.injectionType}``. Also that values can be used in "**@aem-critical-css-inectiontype**" attribute.
+    - **INJECTION_TYPES.INLINE** - inject css with ``<style>`` tag. (see [Injection type - Inline](#injection-type---inline-as-a-part-of-html)) 
+    - **INJECTION_TYPES.LINK** -  inject css with ``<link href="....">`` tag. (see [Injection type - Link](#injection-type---link-as-a-css-file))
+    - **INJECTION_TYPES.AUTO** -  resolve injection type automatically. By default, if _filesize_(after gzip) is lower **10kb**, then **INLINE** type will be used, otherwise **LINK**. See [config](#config-) section
+
 
 ## Config 🦖
 Should helps to configure your build process
 TBD
+
+## Injection type - Inline (as a part of HTML)
+For **small or important(critical)** css files, that type is more - preferable. Because request to small files can be bigger (+ non-blocking rendition), than css content.
+
+HTML output for component/critical css file will be (just example):
+```html
+<!-- @aem-critical-css: path/to/component-css.less -->
+<style>/*2021-2-21 0:49:06*/.my-component{border:1px solid red}.my-component a{border:1px solid green}</style>
+``` 
+
+## Injection type - Link (as a css file)
+That type is better for rarely used components on site pages. That files can be cached in user browser.
+
+HTML output for component/critical css file will be (just example):
+```html
+<!-- @aem-critical-css: path/to/component-css.less -->
+<link href="/etc.clientlibs/aem-critical-css/resources/path/to/component-css.1ha51609gjk2.css" rel="stylesheet"/>
+```
+
 
 ## Partial CSS injection 🐇
 Should helps to split & inject only necessary CSS for your component (depends on component configuration)
