@@ -2,6 +2,7 @@
 
 [Nodejs](https://nodejs.org/en/) tool which helps to build/inject critical/component CSS for [AEM templates/components](https://experienceleague.adobe.com/docs/experience-manager-htl/using/getting-started/getting-started.html?lang=en) ([Adobe Experience Manager](https://www.adobe.com/ru/marketing/experience-manager.html))
 
+![dmantsevich/aem-critical-css](static/up.gif)
 
 ## Features 🐿
 - [x] Fast, flexible, powerful
