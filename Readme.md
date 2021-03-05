@@ -1,8 +1,22 @@
 # AEM Critical CSS 🐝
 
-[Nodejs](https://nodejs.org/en/) tool which helps to build/inject critical/component CSS for [AEM templates/components](https://experienceleague.adobe.com/docs/experience-manager-htl/using/getting-started/getting-started.html?lang=en) ([Adobe Experience Manager](https://www.adobe.com/ru/marketing/experience-manager.html))
+[Nodejs](https://nodejs.org/en/) tool which helps to build/inject critical/component CSS for [AEM templates/components](https://experienceleague.adobe.com/docs/experience-manager-htl/using/getting-started/getting-started.html?lang=en) ([Adobe Experience Manager](https://www.adobe.com/ru/marketing/experience-manager.html)).
+
+It can be used as components CSS dependency resolver/injector (not as automatically code splitter/extractor).  
 
 ![dmantsevich/aem-critical-css](static/up.gif)
+
+## Table of contents 👈🏻
+- [Install](#install-)
+- [How to use](#how-to-use-)
+- [Regular Workflow](#regular-workflow-)
+- [API](#api-)
+- [Config](#config-)
+    - [Injection type - Inline](#injection-type---inline-as-a-part-of-html)
+    - [Injection type - Link](#injection-type---link-as-a-css-file)
+- [Best practice](#best-practice-)
+- [FAQ](#faq-)
+- [Links](#links-)
 
 ## Features 🐿
 - [x] Fast, flexible, powerful
@@ -84,10 +98,27 @@ Next properties & method exports [@dmantsevich/aem-critical-css](https://www.npm
 
 
 ## Config 🦖
-Should helps to configure your build process
-TBD
+Default config file here: [/main/lib/config.js](https://github.com/dmantsevich/aem-critical-css/blob/main/lib/config.js)
 
-## Injection type - Inline (as a part of HTML)
+| Property        | Type           | Description  |
+| ------------- |:-------------:| -----:|
+| `AEM.projectRoot`     | *String* | Path to AEM Project root folder. Default value: `./../`(parent folder) |
+| `AEM.components`     | *String* | Path to [HTL templates](https://experienceleague.adobe.com/docs/experience-manager-htl/using/getting-started/getting-started.html?lang=en#blocks-and-expressions) which should be processed. Path should be relative to `${config.AEM.projectRoot}`. Default value: `ui.apps/src/main/content/jcr_root/apps/` |
+| `criticalCSS.file`     | *String* | Name for output(generated) files. Result filename: `${config.criticalCSS.file}.${config.criticalCSS.type}`. See [Regular Workflow](#regular-workflow-) section. Default value: `_aem-critical-css` |
+| `criticalCSS.type`     | *[CRITICAL_CSS_TYPES.USEAPI](#api-) / [CRITICAL_CSS_TYPES.TEMPLATE](#api-)* | Output file type. Default value: `CRITICAL_CSS_TYPES.USEAPI` |
+| `criticalCSS.injectionType`     |  *[INJECTION_TYPES.AUTO](#api-) / [INJECTION_TYPES.INLINE](#api-) / [INJECTION_TYPES.LINK](#api-)* | Default injection type (if `@aem-critical-css-injectiontype` attribute isn't defined). Default value: `INJECTION_TYPES.AUTO`  |
+| `criticalCSS.injectionTypeAutoResolver`     | *Function(**criticalCSSDefObj**)* | Function-Resolver for `INJECTION_TYPES.AUTO`. Calling for each AEM Critical CSS definition. Should return `INJECTION_TYPES.INLINE` or `INJECTION_TYPES.LINK`. By default: based on CSS GZip size(`getGzip(css) < config.criticalCSS.gzipSize ? INJECTION_TYPES.INLINE : INJECTION_TYPES.LINK`). See `criticalCSS.gzipSize` option.  |
+| `criticalCSS.gzipSize`     | *Integer* | Default value: **10kb**. If CSS GZip size lower than is value, then css will be injected - `INJECTION_TYPES.INLINE`. Otherwise: `INJECTION_TYPES.LINK`. Working only with default `criticalCSS.injectionTypeAutoResolver` |
+| `criticalCSS.sourceAttr`     | *String* |  Attribute with path to css source file. Default value: `@aem-critical-css` |
+| `criticalCSS.injectionTypeAttr`     | *String* |  Attribute with injection type configuration. If attribute isn't present, then `criticalCSS.injectionType` value will be used. Default value: `@aem-critical-css-injectiontype` |
+| `criticalCSS.serviceAttr`     | *String* |  Attribute with path (should be relative to jcr_root) to custom injector service. Default value: `@aem-critical-css-service`. Level: _Expert_. |
+| `criticalCSS.useAPIService`     | *String* | Path (should be relative to jcr_root) to default JS/Java css injector service. By default: **built-in service** ([AEMCriticalCSSService.js](https://github.com/dmantsevich/aem-critical-css/blob/main/lib/aem-critical-css/AEMCriticalCSSService.js)). Level: _Expert_. |
+| `criticalCSS.AEMCriticalCSSServiceDestination`     | *String* | Path, where build-in ([AEMCriticalCSSService.js](https://github.com/dmantsevich/aem-critical-css/blob/main/lib/aem-critical-css/AEMCriticalCSSService.js)) file will be saved. Default value: `ui.apps/src/main/content/jcr_root/apps/aem-critical-css/utils/`. Level: _Expert_. |
+| `criticalCSS.minifyOutput`     | *Boolean* | Minify output(for generated _aem-critical-css.html, _aem-critical-css.js files). Default value: `true` |
+
+
+
+### Injection type - Inline (as a part of HTML)
 For **small or important(critical)** css files, that type is more - preferable. Because request to small files can be bigger (+ non-blocking rendition), than css content.
 
 HTML output for component/critical css file will be (just example):
@@ -96,7 +127,7 @@ HTML output for component/critical css file will be (just example):
 <style>/*2021-2-21 0:49:06*/.my-component{border:1px solid red}.my-component a{border:1px solid green}</style>
 ``` 
 
-## Injection type - Link (as a css file)
+### Injection type - Link (as a css file)
 That type is better for rarely used components on site pages. That files can be cached in user browser.
 
 HTML output for component/critical css file will be (just example):
@@ -123,6 +154,8 @@ TBD
 TBD
 
 ## FAQ 🦆
+If you have any questions or you need help, feel free to ask via github: [Issues](https://github.com/dmantsevich/aem-critical-css/issues)
+
 Most popular questions/answers will be here
 
 TBD
